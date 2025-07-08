@@ -109,8 +109,8 @@
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   environment.variables = {
-    RUSTICL_ENABLE = "radeonsi";
-    ROC_ENABLE_PRE_VEGA = "1";
+    RUSTICL_ENABLE = "radeonsi"; # mesa opencl
+    # ROC_ENABLE_PRE_VEGA = "1";
   };
 
   fileSystems."/mnt/penguin" = {
@@ -128,7 +128,7 @@
 
   fileSystems."/".options = ["noatime"]; # Main Disk
 
-  programs.firefox.enable = true;
+  # programs.firefox.enable = true;
 
   programs.nh = {
     enable = true;
@@ -187,11 +187,12 @@
     kdePackages.filelight
     normcap
     mission-center
-    
+
     # Development
     vscode
     jetbrains.clion
     nil
+    nixd
     alejandra
     clang
     clang-tools
