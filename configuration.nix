@@ -17,8 +17,12 @@
     enable = true;
     enable32Bit = true;
     extraPackages = with pkgs; [
+      mesa
       intel-media-driver
       vpl-gpu-rt
+    ];
+    extraPackages32 = with pkgs; [
+      driversi686Linux.mesa
     ];
   };
 
@@ -191,7 +195,6 @@
 
     # Gaming
     heroic
-    mangohud
 
     # Additional
     aspellDicts.en
