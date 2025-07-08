@@ -10,7 +10,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.initrd.kernelModules = ["amdgpu"];
+  boot.initrd.kernelModules = ["amdgpu" "kvm-intel"];
+
   services.xserver.videoDrivers = ["amdgpu"];
 
   hardware.graphics = {
@@ -23,6 +24,7 @@
     ];
     extraPackages32 = with pkgs; [
       driversi686Linux.mesa
+      driversi686Linux.intel-media-driver
     ];
   };
 
@@ -97,7 +99,7 @@
   users.users.voidy = {
     isNormalUser = true;
     description = "voidy";
-    extraGroups = ["networkmanager" "wheel"];
+    extraGroups = ["networkmanager" "wheel" "gamemode" "libvirtd"];
     shell = pkgs.zsh;
   };
 
@@ -165,7 +167,6 @@
     interactiveShellInit = "
     source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh\n
     export GPG_TTY=$(tty)
-
     ";
   };
 
@@ -174,15 +175,19 @@
     fuzzyCompletion = true;
   };
 
+  programs.virt-manager.enable = true;
+
   environment.systemPackages = with pkgs; [
     # Apps
     brave
     qalculate-qt
-
+    obs-studio
     kdePackages.kate
     kdePackages.kfind
     kdePackages.filelight
     normcap
+    mission-center
+    
     # Development
     vscode
     jetbrains.clion
@@ -217,6 +222,11 @@
         emoji = ["Apple Color Emoji"];
       };
     };
+  };
+
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu.vhostUserPackages = with pkgs; [virtiofsd];
   };
 
   # Before changing this value read the documentation for this option
