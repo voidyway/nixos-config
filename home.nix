@@ -5,8 +5,6 @@
 }: {
   home.username = "voidy";
   home.homeDirectory = "/home/voidy";
-  
-
 
   programs.mpv = {
     enable = true;
@@ -43,11 +41,11 @@
     extraConfig = {
       init.defaultBranch = "main";
       commit.gpgsign = true;
-      gpg.format = "ssh";
-      user.signingkey = "~/.ssh/id_ed25519.pub";
+      tag.gpgSign = true;
+      user.signingkey = "F26C70195A724EE6";
     };
   };
- 
+
   home.stateVersion = "25.05";
   programs.home-manager.enable = true;
 }

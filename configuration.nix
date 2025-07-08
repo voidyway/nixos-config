@@ -148,14 +148,21 @@
   };
 
   programs.ssh.startAgent = true;
+  programs.gnupg = {
+    agent.enable = true;
+  };
 
   programs.gamemode.enable = true;
 
   programs.zsh = {
-    enable =  true;
+    enable = true;
     syntaxHighlighting.enable = true;
     autosuggestions.enable = true;
-    interactiveShellInit = "source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh";
+    interactiveShellInit = "
+    source ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh\n
+    export GPG_TTY=$(tty)
+
+    ";
   };
 
   programs.fzf = {
@@ -163,7 +170,6 @@
     fuzzyCompletion = true;
   };
 
-  
   environment.systemPackages = with pkgs; [
     # Apps
     brave
@@ -172,7 +178,6 @@
     kdePackages.kate
     kdePackages.kfind
     kdePackages.filelight
-
     normcap
     # Development
     vscode
@@ -190,7 +195,7 @@
 
     # Additional
     aspellDicts.en
-    aspellDicts.ar 
+    aspellDicts.ar
     kdePackages.breeze # fixes steam cursor
     kdePackages.breeze-gtk
     kdePackages.sddm-kcm
