@@ -82,18 +82,28 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # services.displayManager.sddm.enable = true;
-  # services.displayManager.sddm.wayland.enable = true;
-  # services.desktopManager.plasma6.enable = true;
-
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
 
-  # environment.plasma6.excludePackages = with pkgs.kdePackages; [
-  #   elisa
-  #   khelpcenter
-  #   plasma-systemmonitor
-  # ];
+  environment.gnome.excludePackages = with pkgs; [
+    gnome-weather
+    gnome-contacts
+    gnome-clocks
+    gnome-maps
+    gnome-music
+    gnome-calendar
+    gnome-tour
+    gnome-connections
+    evince
+    geary
+    simple-scan
+    totem
+    epiphany
+    yelp
+    decibels
+  ];
+
+
 
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -135,8 +145,6 @@
   };
 
   fileSystems."/".options = ["noatime"]; # Main Disk
-
-  # programs.firefox.enable = true;
 
   programs.nh = {
     enable = true;
@@ -185,14 +193,12 @@
 
   programs.virt-manager.enable = true;
 
+  programs.dconf.enable = true; 
+
   environment.systemPackages = with pkgs; [
     # Apps
     brave
-    # qalculate-qt
     obs-studio
-    # kdePackages.kate
-    # kdePackages.kfind
-    # kdePackages.filelight
     normcap
     mission-center
 
@@ -210,13 +216,13 @@
     heroic
 
     # Additional
-    aspellDicts.en
     aspellDicts.ar
-    # kdePackages.breeze # fixes steam cursor
-    # kdePackages.breeze-gtk
-    # kdePackages.sddm-kcm
+    aspellDicts.en
     bibata-cursors
     zsh-fzf-tab
+    refine
+    gnome-extension-manager
+    gnome-tweaks
 
     # GNOME Extensions
     gnomeExtensions.blur-my-shell
@@ -238,6 +244,7 @@
       source-serif
       source-code-pro
       corefonts
+      noto-fonts-color-emoji
     ];
     fontconfig = {
       subpixel.rgba = "rgb";
@@ -245,7 +252,7 @@
         serif = ["New York" "SF Arabic"];
         sansSerif = ["SF Pro" "SF Arabic"];
         monospace = ["JetBrainsMono Nerd Font"];
-        emoji = ["Apple Color Emoji"];
+        emoji = ["Noto Color Emoji"];
       };
     };
   };
@@ -260,7 +267,6 @@
 
   services.smartd = {
     enable = true;
-    notifications.test = true;
   };
 
   services.gnome.gnome-keyring.enable = true;
