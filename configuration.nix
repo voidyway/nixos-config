@@ -9,11 +9,16 @@
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.plymouth.enable = true;
+
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.initrd.kernelModules = ["amdgpu" "kvm-intel"];
 
   services.xserver.videoDrivers = ["amdgpu"];
 
+  hardware.enableAllFirmware = true;
+  hardware.enableRedistributableFirmware = true;
+  hardware.bluetooth.enable = true;
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -77,15 +82,18 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.wayland.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  # services.displayManager.sddm.enable = true;
+  # services.displayManager.sddm.wayland.enable = true;
+  # services.desktopManager.plasma6.enable = true;
 
-  environment.plasma6.excludePackages = with pkgs.kdePackages; [
-    elisa
-    khelpcenter
-    plasma-systemmonitor
-  ];
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
+
+  # environment.plasma6.excludePackages = with pkgs.kdePackages; [
+  #   elisa
+  #   khelpcenter
+  #   plasma-systemmonitor
+  # ];
 
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -95,7 +103,7 @@
     alsa.support32Bit = true;
     pulse.enable = true;
   };
-
+  environment.shells = with pkgs; [zsh];
   users.users.voidy = {
     isNormalUser = true;
     description = "voidy";
@@ -153,7 +161,7 @@
     extraCompatPackages = [pkgs.proton-ge-bin];
   };
 
-  programs.ssh.startAgent = true;
+  # programs.ssh.startAgent = true;
   programs.gnupg = {
     agent.enable = true;
   };
@@ -180,18 +188,17 @@
   environment.systemPackages = with pkgs; [
     # Apps
     brave
-    qalculate-qt
+    # qalculate-qt
     obs-studio
-    kdePackages.kate
-    kdePackages.kfind
-    kdePackages.filelight
+    # kdePackages.kate
+    # kdePackages.kfind
+    # kdePackages.filelight
     normcap
     mission-center
 
     # Development
     vscode
     jetbrains.clion
-    nil
     nixd
     alejandra
     clang
@@ -205,15 +212,33 @@
     # Additional
     aspellDicts.en
     aspellDicts.ar
-    kdePackages.breeze # fixes steam cursor
-    kdePackages.breeze-gtk
-    kdePackages.sddm-kcm
+    # kdePackages.breeze # fixes steam cursor
+    # kdePackages.breeze-gtk
+    # kdePackages.sddm-kcm
     bibata-cursors
     zsh-fzf-tab
+
+    # GNOME Extensions
+    gnomeExtensions.blur-my-shell
+    gnomeExtensions.appindicator
   ];
 
   fonts = {
-    packages = with pkgs; [nerd-fonts.jetbrains-mono ibm-plex dejavu_fonts rubik ubuntu-sans amiri cairo inter iosevka source-sans source-serif source-code-pro];
+    packages = with pkgs; [
+      nerd-fonts.jetbrains-mono
+      ibm-plex
+      dejavu_fonts
+      rubik
+      ubuntu-sans
+      amiri
+      cairo
+      inter
+      iosevka
+      source-sans
+      source-serif
+      source-code-pro
+      corefonts
+    ];
     fontconfig = {
       subpixel.rgba = "rgb";
       defaultFonts = {
@@ -229,6 +254,17 @@
     enable = true;
     qemu.vhostUserPackages = with pkgs; [virtiofsd];
   };
+
+  services.udev.packages = [pkgs.gnome-settings-daemon]; # appindictor
+  services.fwupd.enable = true;
+
+  services.smartd = {
+    enable = true;
+    notifications.test = true;
+  };
+
+  services.gnome.gnome-keyring.enable = true;
+  services.gvfs.enable = true;
 
   # Before changing this value read the documentation for this option
   system.stateVersion = "25.05"; # Did you read the comment?

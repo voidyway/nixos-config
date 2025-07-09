@@ -6,6 +6,20 @@
   home.username = "voidy";
   home.homeDirectory = "/home/voidy";
 
+  dconf = {
+    enable = true;
+    settings = {
+      "org/gnome/shell" = {
+        disable-user-extensions = false;
+        enabled-extensions = with pkgs.gnomeExtensions; [
+          blur-my-shell.extensionUuid
+          appindicator.extensionUuid
+        ];
+      };
+      "org/gnome/desktop/interface".color-scheme = "prefer-dark";
+    };
+  };
+
   programs.mpv = {
     enable = true;
     config = {
