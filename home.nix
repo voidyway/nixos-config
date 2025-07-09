@@ -6,6 +6,7 @@
   home.username = "voidy";
   home.homeDirectory = "/home/voidy";
 
+
   programs.mpv = {
     enable = true;
     config = {

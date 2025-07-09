@@ -9,7 +9,6 @@
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.plymouth.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.initrd.kernelModules = ["amdgpu" "kvm-intel"];
@@ -82,28 +81,14 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
+  services.displayManager.sddm.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
-  environment.gnome.excludePackages = with pkgs; [
-    gnome-weather
-    gnome-contacts
-    gnome-clocks
-    gnome-maps
-    gnome-music
-    gnome-calendar
-    gnome-tour
-    gnome-connections
-    evince
-    geary
-    simple-scan
-    totem
-    epiphany
-    yelp
-    decibels
+  environment.plasma6.excludePackages = with pkgs.kdePackages; [
+    elisa
+    khelpcenter
+    plasma-systemmonitor
   ];
-
-
 
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -146,6 +131,8 @@
 
   fileSystems."/".options = ["noatime"]; # Main Disk
 
+  # programs.firefox.enable = true;
+
   programs.nh = {
     enable = true;
     clean.enable = true;
@@ -169,7 +156,7 @@
     extraCompatPackages = [pkgs.proton-ge-bin];
   };
 
-  # programs.ssh.startAgent = true;
+  programs.ssh.startAgent = true;
   programs.gnupg = {
     agent.enable = true;
   };
@@ -193,12 +180,14 @@
 
   programs.virt-manager.enable = true;
 
-  programs.dconf.enable = true; 
-
   environment.systemPackages = with pkgs; [
     # Apps
     brave
+    qalculate-qt
     obs-studio
+    kdePackages.kate
+    kdePackages.kfind
+    kdePackages.filelight
     normcap
     mission-center
 
@@ -216,17 +205,13 @@
     heroic
 
     # Additional
-    aspellDicts.ar
     aspellDicts.en
+    aspellDicts.ar
+    kdePackages.breeze # fixes steam cursor
+    kdePackages.breeze-gtk
+    kdePackages.sddm-kcm
     bibata-cursors
     zsh-fzf-tab
-    refine
-    gnome-extension-manager
-    gnome-tweaks
-
-    # GNOME Extensions
-    gnomeExtensions.blur-my-shell
-    gnomeExtensions.appindicator
   ];
 
   fonts = {
@@ -244,7 +229,6 @@
       source-serif
       source-code-pro
       corefonts
-      noto-fonts-color-emoji
     ];
     fontconfig = {
       subpixel.rgba = "rgb";
@@ -252,7 +236,7 @@
         serif = ["New York" "SF Arabic"];
         sansSerif = ["SF Pro" "SF Arabic"];
         monospace = ["JetBrainsMono Nerd Font"];
-        emoji = ["Noto Color Emoji"];
+        emoji = ["Apple Color Emoji"];
       };
     };
   };
@@ -262,15 +246,7 @@
     qemu.vhostUserPackages = with pkgs; [virtiofsd];
   };
 
-  services.udev.packages = [pkgs.gnome-settings-daemon]; # appindictor
   services.fwupd.enable = true;
-
-  services.smartd = {
-    enable = true;
-  };
-
-  services.gnome.gnome-keyring.enable = true;
-  services.gvfs.enable = true;
 
   # Before changing this value read the documentation for this option
   system.stateVersion = "25.05"; # Did you read the comment?
