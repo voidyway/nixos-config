@@ -11,12 +11,26 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "palace";
+  # networking.hostName = "palace";
+  networking = {
+    hostName = "palace";
+    nameservers = [
+      "127.0.0.1"
+      "::1"
+    ];
+    networkmanager.enable = true;
+    networkmanager.dns = "none";
+
+  };
+
   time.timeZone = "Asia/Riyadh";
 
   users.users.omar = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+    ];
     shell = pkgs.fish;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDD02Y9FLoeScsjEyZ/vgFM5ufW84fkJPbvZzUUaR78Q voidy" # macbook
@@ -80,6 +94,34 @@
       enable = true;
       settings.PasswordAuthentication = false;
       settings.KbdInteractiveAuthentication = false;
+    };
+
+    stubby = {
+      enable = true;
+      settings = pkgs.stubby.passthru.settingsExample // { # The default settings are available at pkgs.stubby.passthru.settingsExample
+        upstream_recursive_servers = [
+          {
+            address_data = "1.1.1.1";
+            tls_auth_name = "cloudflare-dns.com";
+            tls_pubkey_pinset = [
+              {
+                digest = "sha256";
+                value = "SPfg6FluPIlUc6a5h313BDCxQYNGX+THTy7ig5X3+VA=";
+              }
+            ];
+          }
+          {
+            address_data = "1.0.0.1";
+            tls_auth_name = "cloudflare-dns.com";
+            tls_pubkey_pinset = [
+              {
+                digest = "sha256";
+                value = "SPfg6FluPIlUc6a5h313BDCxQYNGX+THTy7ig5X3+VA=";
+              }
+            ];
+          }
+        ];
+      };
     };
 
   };
