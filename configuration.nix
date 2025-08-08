@@ -14,7 +14,6 @@
   networking.hostName = "palace";
   time.timeZone = "Asia/Riyadh";
 
-  # DON'T FORGET 'passwd'
   users.users.omar = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
@@ -37,6 +36,7 @@
       enable = true;
       interactiveShellInit = ''
         set fish_greeting # Disable greeting
+        export $COLORTERM="truecolor"
       '';
     };
 
@@ -68,8 +68,6 @@
     nixd
     nixfmt-rfc-style
   ];
-
-  # List services that you want to enable:
 
   services = {
 
