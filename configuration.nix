@@ -8,6 +8,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./home-server.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -80,7 +81,17 @@
       clean.extraArgs = "--keep-since 4d --keep 3";
       flake = "/home/omar/nixos-config";
     };
+    tmux.enable = true;
 
+    zoxide = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+
+    fzf = {
+      keybindings = true;
+      fuzzyCompletion = true;
+    };
   };
 
   environment.systemPackages = with pkgs; [
